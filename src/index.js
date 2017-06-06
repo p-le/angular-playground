@@ -1,8 +1,12 @@
 import angular from 'angular';
 import 'angular-route';
-import routes from './routes';
+import './controller';
+import routing from './routing.js';
+import 'normalize.css';
 
-const app = angular.module('myApp', [ 
-  'ngRoute'
+const helloWorldApp = angular.module('helloWorldApp', [
+  'ngRoute',
+  'helloWorldControllers'
 ]);
-app.config(routes);
+console.log(helloWorldApp);
+helloWorldApp.config(routing);
