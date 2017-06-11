@@ -1,0 +1,11 @@
+<fieldset ng-controller="WorkoutController">
+    <legend>Workout Plan</legend>
+    <pre>Current Exercise: {{currentExercise | json}}</pre>
+    <pre>Time left: {{currentExercise.duration - currentExerciseDuration}}</pre>
+    <article>
+        <div id="description__panel" ng-include="'/static/partials/description.html'"></div>
+        <div ng-repeat="video in currentExercise.details.related.videos">
+            <iframe width="330" height="220" src="{{video | youtubeEmbedUrl}}" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </article>
+</fieldset>

@@ -6,34 +6,28 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const autoprefixer = require('autoprefixer');
 
 module.exports = {
-	devtool: 'cheap-module-eval-source-map',
+	devtool: 'cheap-module-source-map',
 	entry: {
 		app: './src/app.js',
-		vendor: ['angular', 'angular-route', 'angular-animate', 'd3']
+    vendor: ['angular', 'angular-route', 'angular-animate', 'd3']
 	},
 	output: {
-		filename: '[name].bundle.js',
+		filename: '[name].[hash].js',
 		path: path.resolve(__dirname, 'dist'),
 		publicPath: '/'
 	},
 	module: {
 		rules: [
 			{
-        test: /\.js$/,
-        enforce: 'pre',
-        use: 'eslint-loader',
-        exclude: [ /node_modules/, /dist/ ]
-      },
-			{
 				test: /\.js$/,
 				exclude: /node_modules/,
 				loader: 'babel-loader',
 				options: {
-					presets: [['es2015', {"modules": false }], 'stage-0']
+					presets: ['es2015', 'stage-0']
 				}
 			},
 			{
-				test: /\.sass$/,
+				test: /\.css$/,
 				use: ExtractTextPlugin.extract({
 					fallback: 'style-loader',
 					use: [
@@ -45,22 +39,13 @@ module.exports = {
 							}
 						},
 						{
-							loader: 'sass-loader'
-						}
-					]
-				})
-			},
-			{
-				test: /\.css$/,
-				use: ExtractTextPlugin.extract({
-					fallback: 'style-loader',
-					use: [
-						{
-							loader: 'css-loader',
+							loader: 'postcss-loader',
 							options: {
-								sourceMap: true
+								plugins: function() {
+									return [precss, autoprefixer];
+								}
 							}
-						}
+						},
 					]
 				})
 			},
@@ -84,7 +69,7 @@ module.exports = {
 			inject: 'head'
 		}),
 		new ExtractTextPlugin({
-      filename: "[name].bundle.css",
+      filename: "[name].[hash].css",
       allChunks: true
     })
 	]

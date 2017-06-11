@@ -13,11 +13,15 @@ const compiler = webpack(webpackConfig);
 if (process.env.NODE_ENV === 'dev') {
   app.use(webpackDevMiddleware(compiler, {
     publicPath: webpackConfig.output.publicPath,
-    stats: {color: true}
+    stats: {
+      colors: true
+    }
   }));
 }
-app.use('/static', express.static('dist'));
-app.get('/', (req, res) => {
+app.use('/', express.static('dist'));
+app.use('/static', express.static('src/assets'));
+
+app.get('*', (req, res, next) => {
   if (process.env.NODE_ENV === 'dev') {
     const filename = path.resolve(compiler.outputPath,'index.html');
     compiler.outputFileSystem.readFile(filename, (err, result) => {
